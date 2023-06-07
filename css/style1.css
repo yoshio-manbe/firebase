@@ -1,0 +1,121 @@
+body{
+    width: 900px;
+    margin: 0 auto;
+    height: 1000px;
+}
+
+p{
+    width: 300px;
+    margin: 0 auto;
+    font-size: 30px;
+    margin-top: 50px;
+    color: #ec54b2;/*文字色*/
+    border: solid 3px #e71c77;/*線色*/
+    padding: 0.5em;/*文字周りの余白*/
+    border-radius: 0.5em;/*角丸*/
+    text-align: center;
+}
+.name{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.talk{
+    position: relative;
+    display: flex;
+}
+#janken{
+    position: absolute; 
+    top: 70px;
+    margin-left: -300px;
+    width: 200px;
+    height: 100px;
+    font-size: 30px;
+}
+textarea{
+    position: relative; 
+    margin-left: 220px;
+    width: 300px;
+}
+#send{
+    position: relative;
+    top: 5px;
+    margin-left: 350px;
+    width: 150px;
+    height: 40px;
+    font-size: 20px;
+}
+#response_text{
+    display: none;
+}
+
+footer{
+    margin-left: 100px;
+    width: 700px;
+    height: 210px;
+    background-color: #89c7de;
+    color: #fff;
+    text-align: center;
+    padding: 30px 0;
+
+    position: absolute;/*←絶対位置*/
+    bottom: 0; /*下に固定*/
+}
+
+#output{
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 200px;
+    width: 700px;
+}
+
+.message{
+    margin-left: 400px;
+    width: 300px;
+    background-color: rgb(220, 245, 181);
+}
+.username{
+    color: rgb(33, 115, 248);
+}
+
+.message2{
+    margin-left: 0px;
+    width: 300px;
+    text-align: left;
+    background-color: rgb(248, 208, 237);
+}
+.lady{
+    color: rgb(252, 92, 92);
+}
+
+.start1 {
+    margin-left: 400px;
+    width: 300px;
+    background-color: rgb(220, 245, 181);
+}
+.start1:first-line {
+    color: rgb(33, 115, 248);
+}
+
+.start2{
+    margin-left: 0px;
+    width: 300px;
+    text-align: left;
+    background-color: rgb(248, 208, 237);
+}
+.start2:first-line {
+    color: rgb(252, 92, 92);
+}
+
+.ubutton{
+    text-align: center;
+    margin-left: 400px;
+    width: 300px;
+    background-color: rgb(220, 245, 181);
+}
+.ubutton button{
+    margin-left: 10px;
+    width: 60px;
+    height: 30px;
+}

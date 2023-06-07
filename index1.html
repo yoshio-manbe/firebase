@@ -6,26 +6,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/css/style1.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
+
+    <p>ギャルトーーーク</p>
     <div>
-        <div>
-            名前：<input type="text" id="uname">
+        <div class="name">
+            君の名前を教えてね！：<input type="text" id="uname">
         </div>
-        <div>
-            <textarea id="text" cols="30" rows="10"></textarea>
-            <button id="send">送信</button>
-        </div>
+        <textarea id="response_text" cols="100" rows="10" disabled>
+        </textarea>
         <div id="output" style="overflow: auto;height: 300px;"></div>
+
+        
+
+        <footer>
+            <textarea id="request_text" cols="100" rows="10" >
+            </textarea>
+            <br />
+            <input id="send" type="button"  value="話しかける" />
+            <br /><br />
+            
+            <div class="talk"></div>
+            <button id="janken">ジャンケンがしたい！</button>
+        </footer>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <script type="module">
-        // Import the functions you need from the SDKs you need
+        // インポートと初期化
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
         import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved }
             from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
-        // Your web app's Firebase configuration
+
+// Firebaseの設定
         const firebaseConfig = {
             apiKey: "",
             authDomain: "",
@@ -34,11 +49,118 @@
             messagingSenderId: "",
             appId: ""
         };
+
         const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app); //RealtimeDBに接続
-        const dbRef = ref(db, "chat"); //RealtimeDB内の"chat"を使う
+        const db = getDatabase(app);
+        const dbRef = ref(db, "chat/data1");
+        const dbRef2 = ref(db, "chat/data2");
+
+        // 送信ボタンのクリックイベントハンドラ
+        $(document).ready(function() {
+    // ユーザーの入力をEnterキーでも送信する処理
+    $('#request_text').keypress(function(e) {
+        if (e.which === 13) {
+            e.preventDefault(); // デフォルトのEnterキーの動作を無効化
+            const uname = $("#uname").val();
+            const text = $("#request_text").val();
+
+            const msg = {
+                uname: uname,
+                text: text
+            };
+
+            const newPostRef1 = push(dbRef);
+            set(newPostRef1, msg);
+
+            reply();
+            $('#request_text').val('');
+        }
+    });  
+});
+
+
+        const API_KEY = '';
+        const URL = "https://api.openai.com/v1/chat/completions";
+
+        function reply() {
+            var text = document.getElementById("request_text").value;
+            async function getResponse() {
+                try {
+                    const response = await axios.post(
+                        URL,
+                        {
+                            "model": "gpt-3.5-turbo",
+                            "messages": [
+                                { "role": "user", "content": text }
+                            ]
+                        },
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${API_KEY}`,
+                            },
+                        }
+                    );
+                    var chatgpt_response = response.data.choices[0].message.content;
+                    console.log(chatgpt_response);
+                    const uname2 = "育ちの良いギャル";
+                    const msg2 = {
+                        uname2: uname2,
+                        text: chatgpt_response
+                    };
+                    // GPTからの応答を表示する処理
+                    var aiMessage = '<div class="message">' + msg2.AI + ' : ' + msg2.text + '</div>';
+                    console.log(msg2)
+                    // $("#output").append(msg.text);
+                    const newPostRef2 = push(dbRef2);
+                    set(newPostRef2, msg2);
+
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            getResponse();
+        }
+        function sendMessage(message) {
+            console.log(message);
+            reply();
+        }
+
+
+        // メッセージ追加イベントのリスナー
+        onChildAdded(dbRef, function(data1) {
+            const msg = data1.val();
+            const key = data1.key;
+            let h = `
+                <div class="message">
+                    <span class="username">${msg.uname + "<br>"}</span>
+                    <span class="usertext">${msg.text}</span>
+                </div>
+            `;
+            $("#output").append(h + "<br>");
+        });
+        
+        // メッセージ追加イベントのリスナー
+        onChildAdded(dbRef2, function(data2) {
+            const msg2 = data2.val();
+            const key2 = data2.key;
+            let h = `
+                <div class="message2">
+                    <span class="lady">${msg2.uname2 + "<br>"}</span>
+                    <span class="autotext">${msg2.text}</span>
+                </div>
+            `;
+            $("#output").append(h + "<br>");
+        });
+
+
+        
 
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
     <script src="/js/script1.js"></script>
+    
 </body>
 </html>
